@@ -14,7 +14,7 @@ const (
 )
 
 func checkAndPrepare() {
-	if stat, err := os.Stat(currentConfig.Bin); err == nil && !stat.IsDir() {
+	if stat, err := os.Stat(starterConfig.Bin); err == nil && !stat.IsDir() {
 		log.Println("clash verified")
 		return
 	}

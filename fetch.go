@@ -16,7 +16,7 @@ func fetchConfigData(force bool) (data []byte, err error) {
 			return
 		}
 	}
-	resp, err := http.Get(currentConfig.Link)
+	resp, err := http.Get(starterConfig.Link)
 	if err != nil {
 		return nil, errors.Wrap(err, "fetch subscribe config failed")
 	}
@@ -46,4 +46,12 @@ func fetchConfig(force bool) (config *ClashConfig, err error) {
 		return nil, errors.Wrap(err, "invalid yaml data")
 	}
 	return
+}
+
+func saveConfig(config *ClashConfig, fileName string) (err error) {
+	data, err := yaml.Marshal(config)
+	if err != nil {
+		return errors.Wrap(err, "marshal yaml failed")
+	}
+	return ioutil.WriteFile(fileName, data, 0644)
 }
