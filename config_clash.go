@@ -69,5 +69,8 @@ func (t *ClashConfig) GetControlPanelEntrypoint() string {
 	if strings.Index(t.ExternalController, "http") == 0 {
 		return t.ExternalController
 	}
+	if strings.Index(t.ExternalController, "[::]") == 0 {
+		t.ExternalController = strings.Replace(t.ExternalController, "[::]", "127.0.0.1", 1)
+	}
 	return "http://" + t.GetExternalController()
 }

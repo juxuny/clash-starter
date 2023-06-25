@@ -42,6 +42,9 @@ func reloadConfig(api string, fileName string) error {
 	data, _ := json.Marshal(map[string]interface{}{
 		"path": fileName,
 	})
+	if verbose {
+		log.Println("api:", api)
+	}
 	buffer := bytes.NewBuffer(data)
 	req, err := http.NewRequest(http.MethodPut, api, buffer)
 	if err != nil {

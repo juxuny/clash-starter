@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"github.com/go-yaml/yaml"
+	"github.com/juxuny/fs"
 	"io/ioutil"
 	"log"
 	"os"
@@ -34,6 +35,13 @@ func initConfig() {
 	log.Println("load config file success: ", starterConfigFile)
 	log.Println("clash config dir:", starterConfig.ConfigDir)
 	log.Println("clash bin file:", starterConfig.Bin)
+	if starterConfig.WorkingDirectory != "" {
+		err = os.Chdir(starterConfig.WorkingDirectory)
+		if err != nil {
+			log.Println(err)
+			os.Exit(255)
+		}
+	}
 }
 
 func start() {
@@ -82,5 +90,15 @@ func main() {
 			continue
 		}
 		log.Println("reload config file success:", clashConfigFullFileName)
+		// auto-remove oldest file
+		autoCleanerHelper := fs.CreateFileCleaner(starterConfig.ConfigDir, func(fileName string, createTime time.Time, modifiedTime time.Time) bool {
+			return path.Ext(fileName) == "yaml" || path.Ext(fileName) == "yml"
+		})
+		err = autoCleanerHelper.Execute(starterConfig.KeepNumOfFile, func(fileName string, createTime time.Time, modifiedTime time.Time) bool {
+			return time.Now().Sub(createTime).Seconds() > float64(starterConfig.KeepDurationInSeconds)
+		})
+		if err != nil {
+			log.Println(err)
+		}
 	}
 }
