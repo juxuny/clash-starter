@@ -61,3 +61,15 @@ func reloadConfig(api string, fileName string) error {
 	}
 	return errors.Errorf("reload failed, status: %v", resp.Status)
 }
+
+func autoGenNoDuplicatedName(usedNameSet map[string]bool, baseName string) (result string) {
+	result = baseName
+	i := 0
+	for {
+		if !usedNameSet[result] {
+			return
+		}
+		result = fmt.Sprintf("%s(%d)", baseName, i+1)
+		i += 1
+	}
+}

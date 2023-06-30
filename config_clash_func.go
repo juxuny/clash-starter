@@ -54,6 +54,7 @@ func (t *ClashConfig) patchMerge(merge *MergeConfig) {
 			t.Proxies = append(merge.GetProxies(), t.Proxies...)
 		}
 	}
+	t.autoRenameDuplicatedProxy()
 	if merge.GetProxyGroups() != nil {
 		if t.ProxyGroups == nil {
 			t.ProxyGroups = merge.GetProxyGroups()
@@ -67,6 +68,14 @@ func (t *ClashConfig) patchMerge(merge *MergeConfig) {
 		} else {
 			t.Rules = append(merge.GetRules(), t.Rules...)
 		}
+	}
+}
+
+func (t *ClashConfig) autoRenameDuplicatedProxy() {
+	usedName := make(map[string]bool)
+	for _, item := range t.Proxies {
+		item.Name = autoGenNoDuplicatedName(usedName, item.Name)
+		usedName[item.Name] = true
 	}
 }
 
