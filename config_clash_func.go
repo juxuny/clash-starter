@@ -1,5 +1,7 @@
 package main
 
+import "strings"
+
 func (t *ClashConfig) patchOverride(autoGenProxyGroups *AutoGenProxyGroup, override *ClashConfig) {
 	if t == nil {
 		return
@@ -82,6 +84,72 @@ func (t *ClashConfig) autoRenameDuplicatedProxy() {
 func (t *ClashConfig) Patch(autoGenProxyGroups *AutoGenProxyGroup, override *ClashConfig, merge *MergeConfig) {
 	t.patchOverride(autoGenProxyGroups, override)
 	t.patchMerge(merge)
+}
+
+func (t *ClashConfig) RunFilter(filter *ProxyFilter) {
+	if filter == nil {
+		return
+	}
+	t.Proxies = t.Proxies.Filter(func(item ClashProxy) bool {
+		return !item.IsMatchFilter(filter)
+	})
+	t.RemoveInvalidProxies()
+}
+
+func (t *ClashConfig) RemoveInvalidProxies() {
+	proxyMapper := make(map[string]bool)
+	for _, proxy := range t.GetProxies() {
+		proxyMapper[proxy.Name] = true
+	}
+
+	for i := range t.ProxyGroups {
+		proxies := make([]string, 0)
+		for _, name := range t.ProxyGroups[i].Proxies {
+			if proxyMapper[name] {
+				proxies = append(proxies, name)
+			}
+		}
+		t.ProxyGroups[i].Proxies = proxies
+	}
+	t.ProxyGroups = t.ProxyGroups.Filter(func(group ClashProxyGroup) bool {
+		return len(group.Proxies) > 0
+	})
+}
+
+type ClashProxyList []ClashProxy
+
+func (t ClashProxyList) Filter(filter func(item ClashProxy) bool) ClashProxyList {
+	ret := make(ClashProxyList, 0)
+	for _, item := range t {
+		if filter(item) {
+			ret = append(ret, item)
+		}
+	}
+	return ret
+}
+
+type ClashProxyGroupList []ClashProxyGroup
+
+func (t ClashProxyGroupList) Filter(filter func(group ClashProxyGroup) bool) ClashProxyGroupList {
+	ret := make(ClashProxyGroupList, 0)
+	for _, group := range t {
+		if filter(group) {
+			ret = append(ret, group)
+		}
+	}
+	return ret
+}
+
+func (t *ClashProxy) IsMatchFilter(filter *ProxyFilter) bool {
+	if filter == nil {
+		return false
+	}
+	for _, searchKey := range filter.BlockName {
+		if strings.Contains(t.Name, searchKey) {
+			return true
+		}
+	}
+	return false
 }
 
 func (t *ClashConfig) GetMixedPort() int {

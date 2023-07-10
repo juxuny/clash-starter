@@ -3,16 +3,16 @@ package main
 import "strings"
 
 type ClashConfig struct {
-	MixedPort          int               `yaml:"mixed-port"`
-	AllowLan           bool              `yaml:"allow-lan"`
-	Mode               string            `yaml:"mode"`
-	LogLevel           string            `yaml:"log-level"`
-	ExternalController string            `yaml:"external-controller"`
-	Secret             string            `yaml:"secret"`
-	DNS                *ClashDNS         `yaml:"dns"`
-	Proxies            []ClashProxy      `yaml:"proxies,omitempty"`
-	ProxyGroups        []ClashProxyGroup `yaml:"proxy-groups"`
-	Rules              []string          `yaml:"rules"`
+	MixedPort          int                 `yaml:"mixed-port"`
+	AllowLan           bool                `yaml:"allow-lan"`
+	Mode               string              `yaml:"mode"`
+	LogLevel           string              `yaml:"log-level"`
+	ExternalController string              `yaml:"external-controller"`
+	Secret             string              `yaml:"secret"`
+	DNS                *ClashDNS           `yaml:"dns"`
+	Proxies            ClashProxyList      `yaml:"proxies,omitempty"`
+	ProxyGroups        ClashProxyGroupList `yaml:"proxy-groups"`
+	Rules              []string            `yaml:"rules"`
 }
 
 type ClashDNS struct {

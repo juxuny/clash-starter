@@ -51,6 +51,7 @@ func start() {
 	}
 	clashConfigFileName := genClashConfigFileName()
 	remoteConfig.Patch(starterConfig.GetAutoProxyGroup(), starterConfig.Override, starterConfig.Merge)
+	remoteConfig.RunFilter(starterConfig.ProxyFilter)
 	err = saveConfig(remoteConfig, path.Join(starterConfig.ConfigDir, clashConfigFileName))
 	if err != nil {
 		panic(err)
@@ -78,6 +79,7 @@ func main() {
 		}
 		clashConfigFileName := genClashConfigFileName()
 		remoteConfig.Patch(starterConfig.GetAutoProxyGroup(), starterConfig.GetOverride(), starterConfig.GetMerge())
+		remoteConfig.RunFilter(starterConfig.ProxyFilter)
 		err = saveConfig(remoteConfig, path.Join(starterConfig.ConfigDir, clashConfigFileName))
 		if err != nil {
 			log.Println(err)
