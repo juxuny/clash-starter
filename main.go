@@ -71,7 +71,7 @@ func main() {
 	initConfig()
 	checkAndPrepare()
 	go start()
-	for range time.NewTimer(time.Second * time.Duration(starterConfig.ReloadInterval)).C {
+	for range time.NewTicker(time.Second * time.Duration(starterConfig.ReloadInterval)).C {
 		remoteConfig, err := fetchConfig(true)
 		if err != nil {
 			log.Println(err)

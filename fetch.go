@@ -49,6 +49,13 @@ func fetchConfig(force bool) (config *ClashConfig, err error) {
 }
 
 func saveConfig(config *ClashConfig, fileName string) (err error) {
+	if config == nil {
+		return errors.Wrap(err, "invalid config data")
+	}
+	log.Println("found proxy: ", len(config.GetProxies()))
+	for _, proxy := range config.GetProxies() {
+		log.Println("found proxy name: ", proxy.Name)
+	}
 	data, err := yaml.Marshal(config)
 	if err != nil {
 		return errors.Wrap(err, "marshal yaml failed")
