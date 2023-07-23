@@ -91,7 +91,7 @@ func (t *ClashConfig) RunFilter(filter *ProxyFilter) {
 		return
 	}
 	t.Proxies = t.Proxies.Filter(func(item ClashProxy) bool {
-		return !item.IsMatchFilter(filter)
+		return item.IsMatchFilter(filter)
 	})
 	t.RemoveInvalidProxies()
 }
@@ -144,12 +144,29 @@ func (t *ClashProxy) IsMatchFilter(filter *ProxyFilter) bool {
 	if filter == nil {
 		return false
 	}
-	for _, searchKey := range filter.BlockName {
-		if strings.Contains(t.Name, searchKey) {
-			return true
+	if filter.BlockName != nil {
+		isBlocked := false
+		for _, searchKey := range filter.BlockName {
+			if strings.Contains(t.Name, searchKey) {
+				isBlocked = true
+				break
+			}
+		}
+		if isBlocked {
+			return false
 		}
 	}
-	return false
+	if filter.Matcher != nil {
+		isMatched := false
+		for _, searchKey := range filter.Matcher {
+			if strings.Contains(t.Name, searchKey) {
+				isMatched = true
+				break
+			}
+		}
+		return isMatched
+	}
+	return true
 }
 
 func (t *ClashConfig) GetMixedPort() int {

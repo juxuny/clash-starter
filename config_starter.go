@@ -28,4 +28,5 @@ type AutoGenProxyGroup struct {
 
 type ProxyFilter struct {
 	BlockName []string `yaml:"block-name"`
+	Matcher   []string `yaml:"matcher"`
 }
