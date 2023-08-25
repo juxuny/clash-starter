@@ -2,8 +2,8 @@ package main
 
 import (
 	"flag"
-	"github.com/go-yaml/yaml"
 	"github.com/juxuny/fs"
+	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"log"
 	"os"
@@ -19,7 +19,12 @@ var (
 )
 
 func init() {
-	flag.StringVar(&starterConfigFile, "c", "config.yaml", "config file")
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defaultConfigFile := path.Join(homeDir, ".config", "clash-starter", "config.yaml")
+	flag.StringVar(&starterConfigFile, "c", defaultConfigFile, "config file")
 	flag.BoolVar(&verbose, "v", false, "output debug info")
 }
 
