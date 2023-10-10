@@ -45,7 +45,7 @@ func initConfig() {
 }
 
 func start() {
-	remoteConfig, err := fetchConfig(false)
+	remoteConfig, err := fetchConfig(starterConfig.ForceRefreshFirst)
 	if err != nil {
 		log.Fatal(err)
 	}

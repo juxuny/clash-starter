@@ -1,6 +1,7 @@
 package main
 
 type StarterConfig struct {
+	ForceRefreshFirst     bool               `yaml:"force-refresh-first"`
 	Link                  string             `yaml:"link"`
 	Bin                   string             `yaml:"bin"`
 	KeepDurationInSeconds int                `yaml:"keep-duration-in-seconds"`
