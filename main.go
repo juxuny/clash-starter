@@ -2,14 +2,15 @@ package main
 
 import (
 	"flag"
-	"github.com/juxuny/fs"
-	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"path"
 	"time"
+
+	"github.com/juxuny/fs"
+	"gopkg.in/yaml.v3"
 )
 
 var (
@@ -57,6 +58,7 @@ func start() {
 	clashConfigFileName := genClashConfigFileName()
 	remoteConfig.Patch(starterConfig.GetAutoProxyGroup(), starterConfig.Override, starterConfig.Merge)
 	remoteConfig.RunFilter(starterConfig.ProxyFilter)
+	remoteConfig.ApplyProxySelector(starterConfig.GenGroup)
 	err = saveConfig(remoteConfig, path.Join(starterConfig.ConfigDir, clashConfigFileName))
 	if err != nil {
 		panic(err)
@@ -85,6 +87,7 @@ func main() {
 		clashConfigFileName := genClashConfigFileName()
 		remoteConfig.Patch(starterConfig.GetAutoProxyGroup(), starterConfig.GetOverride(), starterConfig.GetMerge())
 		remoteConfig.RunFilter(starterConfig.ProxyFilter)
+		remoteConfig.ApplyProxySelector(starterConfig.GenGroup)
 		err = saveConfig(remoteConfig, path.Join(starterConfig.ConfigDir, clashConfigFileName))
 		if err != nil {
 			log.Println(err)

@@ -3,7 +3,7 @@ module github.com/juxuny/clash-starter
 go 1.18
 
 require (
-	github.com/juxuny/fs v0.0.3
+	github.com/juxuny/fs v0.0.4
 	github.com/pkg/errors v0.9.1
 	gopkg.in/yaml.v3 v3.0.1
 )

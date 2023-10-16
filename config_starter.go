@@ -13,6 +13,7 @@ type StarterConfig struct {
 	Override              *ClashConfig       `yaml:"override"`
 	Merge                 *MergeConfig       `yaml:"merge"`
 	ProxyFilter           *ProxyFilter       `yaml:"proxy-filter"`
+	GenGroup              []*ProxySelector   `yaml:"gen-group"`
 }
 type MergeConfig struct {
 	Proxies     []ClashProxy      `yaml:"proxies"`
@@ -25,6 +26,14 @@ type AutoGenProxyGroup struct {
 	Name     string `yaml:"name"`
 	UrlTest  string `yaml:"url-test"`
 	Interval string `yaml:"interval"`
+}
+
+type ProxySelector struct {
+	Type        string       `yaml:"type"`
+	Name        string       `yaml:"name"`
+	UrlTest     string       `yaml:"url-test"`
+	Interval    string       `yaml:"interval"`
+	ProxyFilter *ProxyFilter `yaml:"proxy-filter"`
 }
 
 type ProxyFilter struct {

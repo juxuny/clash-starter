@@ -1,5 +1,7 @@
 github.com/juxuny/fs v0.0.3 h1:VE0pywIrHKvridFY7mx50sRaXTGQZrjzl5SCqWwIASg=
 github.com/juxuny/fs v0.0.3/go.mod h1:yDKjFPzx8iAwGuUSZIx1jo+tgKLXtDYRiIW0vFnfqm0=
+github.com/juxuny/fs v0.0.4 h1:UzPx0zNSuPZSA2n85B2TkHopDF1GXRIfUN96OCuqIwo=
+github.com/juxuny/fs v0.0.4/go.mod h1:yDKjFPzx8iAwGuUSZIx1jo+tgKLXtDYRiIW0vFnfqm0=
 github.com/kr/pretty v0.2.1 h1:Fmg33tUaq4/8ym9TJN1x7sLJnHVwhP33CNkpYV/7rwI=
 github.com/kr/pretty v0.2.1/go.mod h1:ipq/a2n7PKx3OHsz4KJII5eveXtPO4qwEXGdVfWzfnI=
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=

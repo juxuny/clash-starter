@@ -1,6 +1,9 @@
 package main
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 func (t *ClashConfig) patchOverride(autoGenProxyGroups *AutoGenProxyGroup, override *ClashConfig) {
 	if t == nil {
@@ -84,6 +87,29 @@ func (t *ClashConfig) autoRenameDuplicatedProxy() {
 func (t *ClashConfig) Patch(autoGenProxyGroups *AutoGenProxyGroup, override *ClashConfig, merge *MergeConfig) {
 	t.patchOverride(autoGenProxyGroups, override)
 	t.patchMerge(merge)
+}
+
+func (t *ClashConfig) ApplyProxySelector(selectors []*ProxySelector) {
+	list := make([]ClashProxyGroup, 0)
+	for _, selector := range selectors {
+		clashProxyGroup := ClashProxyGroup{
+			Type:     selector.Type,
+			Name:     selector.Name,
+			Url:      selector.UrlTest,
+			Interval: selector.Interval,
+			Proxies:  nil,
+		}
+		for _, proxyItem := range t.Proxies {
+			if proxyItem.IsMatchFilter(selector.ProxyFilter) {
+				clashProxyGroup.Proxies = append(clashProxyGroup.Proxies, proxyItem.Name)
+			}
+		}
+		fmt.Println("selector: ", selector.Name, " len: ", len(clashProxyGroup.Proxies))
+		if len(clashProxyGroup.Proxies) > 0 {
+			list = append(list, clashProxyGroup)
+		}
+	}
+	t.ProxyGroups = append(t.ProxyGroups, list...)
 }
 
 func (t *ClashConfig) RunFilter(filter *ProxyFilter) {
